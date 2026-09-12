@@ -210,6 +210,7 @@ async function runSearch() {
 function prepareNewCustomer(searchValue = "") {
   currentCustomer = null;
   $("customerId").value = "";
+  $("customerName").value = "";
 
   $("searchResult").className = "search-result empty-state";
   $("searchResult").textContent =
@@ -231,10 +232,15 @@ async function selectCustomer(customer) {
   $("customerId").value = customer.id;
   $("mobileNo").value = customer.mobileNo || "";
   $("carNo").value = customer.latestCarNo || "";
+  $("customerName").value = customer.name || "";
 
   $("searchResult").className = "search-result";
   $("searchResult").innerHTML = `
     <div class="customer-summary">
+      <div class="summary-row">
+        <span>Name</span>
+        <span>${escapeHtml(customer.name || "-")}</span>
+      </div>
       <div class="summary-row">
         <span>Mobile No</span>
         <span>${escapeHtml(customer.mobileNo || "-")}</span>
@@ -267,6 +273,7 @@ async function saveBill(event) {
   const billNo = $("billNo").value.trim();
   const mobileNo = normalizeMobile($("mobileNo").value);
   const carNo = normalizeCar($("carNo").value);
+  const customerName = $("customerName").value.trim();
 
   if (!billNo) {
     showToast("Enter Bill No.", true);
@@ -324,6 +331,10 @@ async function saveBill(event) {
     updates[`customers/${customerId}/latestCarNo`] = carNo;
     updates[`customers/${customerId}/updatedAt`] = now;
 
+    if (customerName) {
+      updates[`customers/${customerId}/name`] = customerName;
+    }
+
     if (!existingCustomer?.createdAt) {
       updates[`customers/${customerId}/createdAt`] = now;
     }
@@ -340,6 +351,7 @@ async function saveBill(event) {
       billNo,
       mobileNo,
       carNo,
+      ...(customerName ? { customerName } : {}),
       createdAt: now
     };
 
@@ -555,7 +567,7 @@ async function loadLatestCustomers() {
     console.error(error);
 
     $("customerTableBody").innerHTML =
-      `<tr><td colspan="4" class="table-empty">Unable to load customers.</td></tr>`;
+      `<tr><td colspan="5" class="table-empty">Unable to load customers.</td></tr>`;
 
     showToast(
       "Customer list failed. Add updatedAt index in database rules.",
@@ -620,12 +632,13 @@ function renderCustomerTable() {
 
   if (!customerRows.length) {
     tbody.innerHTML =
-      `<tr><td colspan="4" class="table-empty">No customers found.</td></tr>`;
+      `<tr><td colspan="5" class="table-empty">No customers found.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = customerRows.map(customer => `
     <tr>
+      <td>${escapeHtml(customer.name || "-")}</td>
       <td>${escapeHtml(customer.mobileNo || "-")}</td>
       <td>${escapeHtml(customer.latestCarNo || "-")}</td>
       <td>${escapeHtml(formatDate(customer.updatedAt))}</td>
