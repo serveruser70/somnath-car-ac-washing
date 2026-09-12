@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Somnath Car AC & Washing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">S</div>
+        <div>
+          <h1>Somnath Car AC & Washing</h1>
+          <p>Customer Billing Tool</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-view="entryView">New / Existing Bill</button>
+        <button class="nav-item" data-view="customersView">Customers</button>
+      </nav>
+
+      <div class="sidebar-note">
+        <strong>Somnath Car AC & Washing</strong>
+        <span>Fast indexed customer bill history</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Dashboard</p>
+          <h2>Somnath Car AC & Washing</h2>
+        </div>
+
+        <div class="db-status" id="dbStatus">
+          <span class="status-dot"></span>
+          <span>Waiting for Firebase config</span>
+        </div>
+      </header>
+
+      <section id="entryView" class="view active-view">
+        <div class="grid two-col">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <p class="eyebrow">Step 1</p>
+                <h3>Find Customer</h3>
+              </div>
+              <span class="mini-badge">Indexed Search</span>
+            </div>
+
+            <div class="search-row">
+              <input id="searchValue" type="text" placeholder="Mobile No. or Car No.">
+              <button id="searchBtn" class="btn secondary">Search</button>
+            </div>
+
+            <div class="helper">
+              Search uses Mobile/Car index. It does not download the full customer database.
+            </div>
+
+            <div id="searchResult" class="search-result empty-state">
+              No customer selected.
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <p class="eyebrow">Step 2</p>
+                <h3>Add New Bill</h3>
+              </div>
+            </div>
+
+            <form id="billForm">
+              <input type="hidden" id="customerId">
+
+              <div class="form-grid">
+                <div class="field">
+                  <label for="billNo">Bill No</label>
+                  <input id="billNo" type="text" placeholder="e.g. 1258" required>
+                </div>
+
+                <div class="field">
+                  <label for="carNo">Car No</label>
+                  <input id="carNo" type="text" placeholder="e.g. GJ05AB1234" required>
+                </div>
+
+                <div class="field full">
+                  <label for="mobileNo">Mobile No</label>
+                  <input id="mobileNo" type="tel" inputmode="numeric" maxlength="10" placeholder="10 digit mobile number" required>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" id="clearBtn" class="btn ghost">Clear</button>
+                <button type="submit" class="btn primary">Save Bill</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="card history-card">
+          <div class="card-head">
+            <div>
+              <p class="eyebrow">Customer History</p>
+              <h3>Bill History</h3>
+            </div>
+            <span id="historyCount" class="badge">0 Bills</span>
+          </div>
+
+          <div id="billHistory" class="history-list empty-state">
+            Search or save a customer to see bill history.
+          </div>
+
+          <div class="center-action">
+            <button id="loadOlderBillsBtn" class="btn ghost hidden">Load Older Bills</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="customersView" class="view">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <p class="eyebrow">Database</p>
+              <h3>Customers</h3>
+            </div>
+            <div class="header-actions">
+              <span class="mini-badge">50 / page</span>
+              <button id="refreshBtn" class="btn secondary">Refresh</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mobile No</th>
+                  <th>Latest Car No</th>
+                  <th>Updated</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="customerTableBody">
+                <tr><td colspan="4" class="table-empty">No data loaded.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pagination-bar">
+            <span id="customerPageInfo">Latest 50 customers</span>
+            <button id="loadOlderCustomersBtn" class="btn ghost hidden">Load Older</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- Compat SDK: supports direct file:// double-click and normal hosting -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
