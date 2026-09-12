@@ -60,10 +60,6 @@
               <button id="searchBtn" class="btn secondary">Search</button>
             </div>
 
-            <div class="helper">
-              Search uses Mobile/Car index. It does not download the full customer database.
-            </div>
-
             <div id="searchResult" class="search-result empty-state">
               No customer selected.
             </div>
@@ -91,9 +87,14 @@
                   <input id="carNo" type="text" placeholder="e.g. GJ05AB1234" required>
                 </div>
 
-                <div class="field full">
+                <div class="field">
                   <label for="mobileNo">Mobile No</label>
                   <input id="mobileNo" type="tel" inputmode="numeric" maxlength="10" placeholder="10 digit mobile number" required>
+                </div>
+
+                <div class="field">
+                  <label for="customerName">Name <span style="font-weight:500;color:#8c96aa">(Optional)</span></label>
+                  <input id="customerName" type="text" maxlength="80" placeholder="Customer name">
                 </div>
               </div>
 
@@ -141,6 +142,7 @@
             <table>
               <thead>
                 <tr>
+                  <th>Name</th>
                   <th>Mobile No</th>
                   <th>Latest Car No</th>
                   <th>Updated</th>
@@ -148,7 +150,7 @@
                 </tr>
               </thead>
               <tbody id="customerTableBody">
-                <tr><td colspan="4" class="table-empty">No data loaded.</td></tr>
+                <tr><td colspan="5" class="table-empty">No data loaded.</td></tr>
               </tbody>
             </table>
           </div>
